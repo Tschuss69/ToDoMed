@@ -1,0 +1,6 @@
+export const ERROR_TEXT_FR = "Doit être un texte"
+export const ERROR_MAIL_FR = "Doit être un mail"
+export const ERROR_DATE_FR = "Doit être une date"
+export const ERROR_URI_CODEABLE_CONCEPT = "Doit être une uri d'un CodeableConcept valide"
+export const ERROR_URI_REFERENCE = "Doit être une uri d'une Réference valide"
+export const ERROR_OBLIGATOIRE = "Obligatoire"

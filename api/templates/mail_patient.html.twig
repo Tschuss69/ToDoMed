@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invitation à votre espace personnel - ICS</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; padding: 0; color: #333; }
+        .container { max-width: 600px; margin: auto; background-color: #f0f0f0; padding: 20px; }
+        .button { background-color: #004a99; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Bonjour,</h2>
+    <p>Nous vous invitons à vous connecter à votre <strong>espace personnel</strong> sur le site de l'<strong>Institut Cardio-Vasculaire de Strasbourg (ICS)</strong> afin de consulter les informations relatives à votre procédure et de compléter les informations nécessaires à votre prise en charge.</p>
+    <p>Vous pouvez accéder à votre espace personnel en utilisant les identifiants suivants :</p>
+    <ul>
+        <li><strong>Nom d'utilisateur :</strong> {{ username }}</li>
+        <li><strong>Mot de passe :</strong> {{ email }}</li>
+    </ul>
+    <p><a href="http://localhost/login" class="button">Accéder à mon espace personnel</a></p>
+    <p>Si vous rencontrez des difficultés pour vous connecter ou si vous avez besoin d'assistance, n'hésitez pas à nous contacter.</p>
+    <p>Merci pour votre confiance,</p>
+    <p>L'équipe de l'Institut Cardio-Vasculaire de Strasbourg (ICS)</p>
+</div>
+</body>
+</html>
