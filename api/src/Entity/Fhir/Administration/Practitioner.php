@@ -3,6 +3,8 @@
 namespace App\Entity\Fhir\Administration;
 
 use ApiPlatform\Metadata\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Entity\Fhir\Foundation\DataTypes\HumanName as HumanName;
@@ -10,16 +12,8 @@ use App\Entity\Fhir\Foundation\DataTypes\HumanName as HumanName;
 
 #[ApiResource(mercure: true)]
 #[ORM\Entity]
-class Practitioner
+class Practitioner extends User
 {
-    /**
-     * The entity ID
-     */
-    #[ORM\Id]
-    #[ORM\Column(type: 'integer')]
-    #[ORM\GeneratedValue]
-    private ?int $id = null;
-
     #[ORM\OneToMany(mappedBy: 'practitioner', targetEntity: HumanName::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $names;
 
@@ -42,11 +36,9 @@ class Practitioner
         $this->practitionerRoles = new ArrayCollection();
     }
 
-    // Getters and setters
-
-    public function getId(): ?int
+    public function isPractitioner(): bool
     {
-        return $this->id;
+        return true;
     }
 
     public function getGender(): ?string

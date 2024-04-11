@@ -34,20 +34,14 @@ use App\Traits\BirthdateTrait;
     requirements: ['id' => '\d+'],
     controller: GetEncounterByPatientController::class,
 )]
-class Patient
+class Patient extends User
 {
     use GenderTrait;
     use NameTrait;
     use BirthdateTrait;
 
-    /**
-     * The entity ID
-     */
-    #[ORM\Id]
-    #[ORM\Column(type: 'integer')]
-    #[ORM\GeneratedValue]
     #[Groups(['admin:read', 'admin:write', 'practitioner:read', 'practitioner:write'])]
-    private ?int $id = null;
+    protected ?int $id = null;
 
 
     #[ORM\JoinTable(name: 'patient_has_name')]
@@ -62,9 +56,8 @@ class Patient
     #[Groups(['admin:read', 'admin:write', 'practitioner:read', 'practitioner:write', 'patient:read'])]
     private Collection $generalPractitioner;
 
-    #[ORM\Column(type: 'string', length: 50)]
     #[Groups(['admin:read', 'admin:write', 'practitioner:read', 'practitioner:write', 'patient:read'])]
-    private ?string $email = null;
+    protected ?string $email = null;
 
     #[ORM\Column(type: 'string', length: 50, nullable: true)]
     #[Groups(['admin:read', 'admin:write', 'practitioner:read', 'practitioner:write', 'patient:read'])]
@@ -73,24 +66,9 @@ class Patient
     #[ORM\OneToMany(mappedBy: 'subject', targetEntity: Encounter::class, cascade: ['persist', 'remove'])]
     private Collection $encounters;
 
-
-
-    public function getId(): ?int
+    public function isPatient(): bool
     {
-        return $this->id;
-    }
-
-
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
-    public function setEmail(string $email): self
-    {
-        $this->email = $email;
-
-        return $this;
+        return true;
     }
 
     public function getPhone(): ?string
