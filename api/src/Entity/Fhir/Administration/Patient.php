@@ -8,6 +8,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Controller\GetEncounterByPatientController;
+use App\State\Processor\UserProcessor;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -25,7 +26,7 @@ use App\Traits\BirthdateTrait;
 )]
 #[ORM\Entity]
 #[Get]
-#[Post]
+#[Post(processor: UserProcessor::class)]
 #[Delete]
 #[Put]
 #[GetCollection]

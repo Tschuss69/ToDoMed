@@ -3,6 +3,9 @@
 namespace App\Entity\Fhir\Administration;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Post;
+use App\State\Processor\UserProcessor;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -10,7 +13,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 use App\Entity\Fhir\Foundation\DataTypes\HumanName as HumanName;
 
 
-#[ApiResource(mercure: true)]
+#[ApiResource(
+    operations: [
+        new Get(),
+        new Post(processor: UserProcessor::class),
+    ]
+)]
 #[ORM\Entity]
 class Practitioner extends User
 {
