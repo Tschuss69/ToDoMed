@@ -6,28 +6,37 @@ use ApiPlatform\Metadata\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Entity\Fhir\Foundation\DataTypes\HumanName as HumanName;
 
 
-#[ApiResource(mercure: true)]
+#[ApiResource(
+    normalizationContext: ['groups' => ['admin:read','practitioner:read', 'patient:read']],
+    denormalizationContext: ['groups' => ['admin:write', 'practitioner:write']],
+    mercure: true
+)]
 #[ORM\Entity]
 class Practitioner extends User
 {
     #[ORM\OneToMany(mappedBy: 'practitioner', targetEntity: HumanName::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[Groups(['admin:read', 'admin:write', 'practitioner:read', 'practitioner:write', 'patient:read'])]
     private Collection $names;
 
     #[ORM\Column(type: 'string', length: 50)]
     #[Assert\NotBlank]
     #[Assert\Choice(choices: ['male', 'female', 'other', 'unknown'])]
+    #[Groups(['admin:read', 'admin:write', 'practitioner:read', 'practitioner:write', 'patient:read'])]
     private ?string $gender = null;
 
     #[ORM\Column(type: 'date')]
     #[Assert\NotNull]
+    #[Groups(['admin:read', 'admin:write', 'practitioner:read', 'practitioner:write', 'patient:read'])]
     private ?\DateTimeInterface $birthDate = null;
 
     #[ORM\OneToMany(mappedBy: 'practitioner', targetEntity: PractitionerRole::class, cascade: ['persist'], orphanRemoval: true)]
     #[Assert\Count(min: 1, minMessage: 'A practitioner must have at least one practitioner role.')]
+    #[Groups(['admin:read', 'admin:write', 'practitioner:read', 'practitioner:write', 'patient:read'])]
     private Collection $practitionerRoles;
 
     public function __construct()

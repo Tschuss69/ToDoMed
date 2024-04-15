@@ -4,6 +4,7 @@ namespace App\Entity\Fhir\Administration;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Post;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -13,6 +14,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(
     operations: [
         new Get(),
+        new Post(),
     ],
     normalizationContext: ['groups' => ['admin:read', 'practitioner:read', 'patient:read']],
     denormalizationContext: ['groups' => ['admin:write', 'practitioner:write']]
@@ -31,12 +33,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(type: 'string', length: 50)]
+    #[Groups(['admin:write', 'practitioner:write', 'admin:read', 'practitioner:read'])]
     protected ?string $email = null;
 
     #[ORM\Column]
+    #[Groups(['admin:write', 'practitioner:write', 'admin:read', 'practitioner:read'])]
     private array $roles = [];
 
     #[ORM\Column]
+    #[Groups(['admin:write', 'practitioner:write'])]
     private ?string $password = null;
 
     public function getId(): ?int
@@ -52,6 +57,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function isPatient(): bool
     {
         return false;
+    }
+
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    /**
+     * @param string|null $email
+     */
+    public function setEmail(?string $email): void
+    {
+        $this->email = $email;
     }
 
     /**

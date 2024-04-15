@@ -6,10 +6,16 @@ namespace App\Entity\Fhir\Administration;
 
 use ApiPlatform\Metadata\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['admin:read','practitioner:read', 'patient:read']],
+    denormalizationContext: ['groups' => ['admin:write', 'practitioner:write']],
+    mercure: true
+)]
 #[ORM\Entity]
 class PractitionerRole
 {
@@ -24,9 +30,11 @@ class PractitionerRole
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\Choice(choices: ['médecin', 'secrétaire', 'infirmière', 'ARC'])]
+    #[Groups(['admin:read', 'admin:write', 'practitioner:read', 'practitioner:write', 'patient:read'])]
     private ?string $codeCode = null;
 
     #[ORM\OneToMany(mappedBy: 'requesterPractitionerRole', targetEntity: '\App\Entity\Fhir\Workflow\Task')]
+    #[ORM\JoinColumn(nullable: true)]
     private Collection $requestedTasks;
 
     #[ORM\ManyToMany(mappedBy: 'requestedPerformers', targetEntity: '\App\Entity\Fhir\Workflow\Task')]

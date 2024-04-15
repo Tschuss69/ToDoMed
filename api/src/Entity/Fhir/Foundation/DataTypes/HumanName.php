@@ -5,6 +5,7 @@ namespace App\Entity\Fhir\Foundation\DataTypes;
 
 use ApiPlatform\Metadata\ApiResource;
 
+use App\Entity\Fhir\Administration\Practitioner;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints AS Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -13,7 +14,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * FHIR v4.0.0
  * https://www.hl7.org/fhir/datatypes.html#HumanName
  */
-#[ApiResource(mercure: true)]
+#[ApiResource(
+    normalizationContext: ['groups' => ['admin:read','practitioner:read', 'patient:read']],
+    denormalizationContext: ['groups' => ['admin:write', 'practitioner:write']],
+    mercure: true)]
 #[ORM\Entity]
 class HumanName extends Element
 {
@@ -42,6 +46,10 @@ class HumanName extends Element
     #[ORM\Column(type: 'simple_array', nullable: true)]
     #[Groups(['admin:read', 'admin:write', 'practitioner:read', 'practitioner:write'])]
     protected $suffix;
+
+    #[ORM\ManyToOne(targetEntity: Practitioner::class, inversedBy: 'names')]
+    private $practitioner;
+
 
     public function getSuffix() : array
     {
@@ -221,5 +229,14 @@ class HumanName extends Element
         $this->given = array();
         $this->prefix = array();
         $this->suffix = array();
+    }
+
+    public function setPractitioner(?Practitioner $practitioner): self {
+        $this->practitioner = $practitioner;
+        return $this;
+    }
+
+    public function getPractitioner(): ?Practitioner {
+        return $this->practitioner;
     }
 }
