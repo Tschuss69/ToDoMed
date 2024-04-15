@@ -3,8 +3,11 @@
 namespace App\Entity\Fhir\Administration;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use App\State\Processor\UserProcessor;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -20,6 +23,11 @@ use App\Entity\Fhir\Foundation\DataTypes\HumanName as HumanName;
     mercure: true
 )]
 #[ORM\Entity]
+#[Get]
+#[Post(processor: UserProcessor::class)]
+#[Delete]
+#[Put]
+#[GetCollection]
 class Practitioner extends User
 {
     #[ORM\OneToMany(mappedBy: 'practitioner', targetEntity: HumanName::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
