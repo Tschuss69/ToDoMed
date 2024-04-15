@@ -33,7 +33,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(type: 'string', length: 50)]
-    #[Groups(['admin:write', 'practitioner:write', 'admin:read', 'practitioner:read'])]
+    #[Groups(['read', 'admin:write', 'practitioner:write', 'admin:read', 'practitioner:read'])]
     protected ?string $email = null;
 
     #[ORM\Column]
@@ -124,13 +124,4 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
-    public function getEmail(): string
-    {
-        return (string) $this->email;
-    }
-
-    public function setEmail(string $email): void
-    {
-        $this->email = $email;
-    }
 }

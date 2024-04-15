@@ -15,10 +15,9 @@ use App\Entity\Fhir\Foundation\DataTypes\HumanName as HumanName;
 
 
 #[ApiResource(
-    operations: [
-        new Get(),
-        new Post(processor: UserProcessor::class),
-    ]
+    normalizationContext: ['groups' => ['admin:read','practitioner:read', 'patient:read']],
+    denormalizationContext: ['groups' => ['admin:write', 'practitioner:write']],
+    mercure: true
 )]
 #[ORM\Entity]
 class Practitioner extends User
