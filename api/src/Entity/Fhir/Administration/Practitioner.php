@@ -3,6 +3,9 @@
 namespace App\Entity\Fhir\Administration;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Post;
+use App\State\Processor\UserProcessor;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -12,9 +15,10 @@ use App\Entity\Fhir\Foundation\DataTypes\HumanName as HumanName;
 
 
 #[ApiResource(
-    normalizationContext: ['groups' => ['admin:read','practitioner:read', 'patient:read']],
-    denormalizationContext: ['groups' => ['admin:write', 'practitioner:write']],
-    mercure: true
+    operations: [
+        new Get(),
+        new Post(processor: UserProcessor::class),
+    ]
 )]
 #[ORM\Entity]
 class Practitioner extends User
