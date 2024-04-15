@@ -27,3 +27,6 @@ services:
             - { name: doctrine.event_subscriber }
         arguments:
             $mailer: '@mailer'
+    App\EventSubscriber\PatientRoleSubscriber:
+        tags:
+            - { name: doctrine.event_subscriber }

@@ -18,7 +18,6 @@ use App\Traits\GenderTrait;
 use App\Traits\NameTrait;
 use App\Traits\BirthdateTrait;
 
-
 #[ApiResource(
     normalizationContext: ['groups' => ['admin:read','practitioner:read', 'patient:read']],
     denormalizationContext: ['groups' => ['admin:write', 'practitioner:write']],
@@ -41,6 +40,8 @@ class Patient extends User
     use NameTrait;
     use BirthdateTrait;
 
+
+
     #[Groups(['admin:read', 'admin:write', 'practitioner:read', 'practitioner:write'])]
     protected ?int $id = null;
 
@@ -49,19 +50,19 @@ class Patient extends User
     #[ORM\JoinColumn(name: 'patient_id', referencedColumnName: 'id')]
     #[ORM\InverseJoinColumn(name: 'name_id', referencedColumnName: 'id', unique: true)]
     #[ORM\ManyToMany(targetEntity: 'App\Entity\Fhir\Foundation\DataTypes\HumanName', cascade: ['persist', 'remove'])]
-    #[Groups(['admin:read', 'admin:write', 'practitioner:read', 'practitioner:write', 'patient:read'])]
+    #[Groups(['practitioner:read', 'practitioner:write', 'patient:read'])]
     protected Collection $name;
 
 
     #[ORM\ManyToMany(targetEntity: '\App\Entity\Fhir\Administration\PractitionerRole', inversedBy: 'patients')]
-    #[Groups(['admin:read', 'admin:write', 'practitioner:read', 'practitioner:write', 'patient:read'])]
+    #[Groups(['practitioner:read', 'practitioner:write', 'patient:read'])]
     private Collection $generalPractitioner;
 
-    #[Groups(['admin:read', 'admin:write', 'practitioner:read', 'practitioner:write', 'patient:read'])]
+    #[Groups(['practitioner:read', 'practitioner:write', 'patient:read'])]
     protected ?string $email = null;
 
     #[ORM\Column(type: 'string', length: 50, nullable: true)]
-    #[Groups(['admin:read', 'admin:write', 'practitioner:read', 'practitioner:write', 'patient:read'])]
+    #[Groups(['practitioner:read', 'practitioner:write', 'patient:read'])]
     private ?string $phone = null;
 
     #[ORM\OneToMany(mappedBy: 'subject', targetEntity: Encounter::class, cascade: ['persist', 'remove'])]
