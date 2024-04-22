@@ -22,7 +22,6 @@ const Page: NextComponentType<NextPageContext> = () => {
   const router = useRouter();
   const { id } = router.query;
 
-
   const { data: { data: patient, hubURL, text } = { hubURL: null, text: "" } } =
     useQuery<FetchResponse<Patient> | undefined>(["patient", id], () =>
       getPatient(id)
@@ -33,7 +32,6 @@ const Page: NextComponentType<NextPageContext> = () => {
     return <DefaultErrorPage statusCode={404} />;
   }
 
-
   return (
     <div>
       <div>
@@ -42,7 +40,7 @@ const Page: NextComponentType<NextPageContext> = () => {
         </Head>
       </div>
       <Layout>
-        <DashboardPatient patientId={56}/>
+        <DashboardPatient patientId={patientData['id']}/>
       </Layout>
 
     </div>

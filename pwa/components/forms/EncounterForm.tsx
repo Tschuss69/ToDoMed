@@ -1,64 +1,36 @@
 import React, {FunctionComponent, useState} from "react";
-import {useRouter} from "next/router";
 import {useMutation} from "react-query";
 import {FetchError, FetchResponse} from "@/utils/dataAccess";
 import {Patient} from "@/types/Patient";
 import {ErrorMessage, Field, Formik} from "formik";
 import {DateFormikInput} from "@/components/ui/form/DateFormikInput";
-import {InputFormik} from "@/components/ui/form/InputFormik";
 import {Button} from "@/components/ui/Button";
 import {deleteEncounter, saveEncounter} from "@/api/encounter/fetch";
 import {Encounter} from "@/types/Encounter";
 import {Task} from "@/types/Task";
 
 
-const patient_preInitialValue = {
-  gender : "unknown"
-};
 
-const patient_initial: Patient = {
-  name: [{
-    use: 'usual',
-    family: '',
-  }]
-}
-
-const apiform = {
-  "status": "unknown",
-  "subject": {
-    "name": [
-      {
-        "use": "usual",
-        "family": "schaaf",
-        "given": [
-          "mathieu"
-        ]
-      }],
-      "email": "mathieu.schaaf@gmail.com"
-  },
-  "type": "/codeable_concepts/1",
-  "plannedStartDate": "2024-04-04T03:26:51.780Z"
-}
-
-const initialTask = (content: 'initial' | 'intervention' | 'complication' | 'telesuivi'): Task => {
+const initialTask = (content: 'initial' | 'intervention' | 'complication' | 'telesuivi', description: string): Task => {
   return(
     {
       status: 'requested',
       priority: 'routine',
-      description: 'Video à regarder',
-      completionRate: 0,
+      description: description,
       content: content,
     }
   )
 }
 
 
-const encounter_initial: Encounter = {
+const encounter_initial = {
   status: 'unknown',
-  subject: patient_initial,
   type: "/codeable_concepts/1",
   tasks:[
-    initialTask("initial"), initialTask("intervention"), initialTask("complication"), initialTask('telesuivi')
+    initialTask("initial", "Vidéo d'introduction"),
+    initialTask("intervention", "La pose d'un pace maker c'est quoi ?"),
+    initialTask("complication", "Quels sont les risques de l'intervention ?"),
+    initialTask('telesuivi', "Dois-je demander un télé-suivi ? ")
   ]
 };
 
@@ -75,23 +47,22 @@ interface DeleteParams {
 }
 
 
-export const EncounterForm: FunctionComponent<Props> = ({ setOpen, encounter }) => {
+export const EncounterForm: FunctionComponent<Props> = ({ setOpen, encounter, patient}) => {
+
   const [, setError] = useState<string | null>(null);
-  const router = useRouter();
 
   const saveMutation = useMutation<
     FetchResponse<Patient> | undefined,
     Error | FetchError,
     SaveParams
-    >((saveParams) => saveEncounter(saveParams), {
-      onSuccess: () =>  setOpen(false)});
+    >((saveParams) => saveEncounter(saveParams));
 
   const deleteMutation = useMutation<
     FetchResponse<Encounter> | undefined,
     Error | FetchError,
     DeleteParams
     >(({ id }) => deleteEncounter(id), {
-    onSuccess: () => {
+    onSuccess: (response) => {
       setOpen(false)
     },
     onError: (error) => {
@@ -110,9 +81,14 @@ export const EncounterForm: FunctionComponent<Props> = ({ setOpen, encounter }) 
   const onHandleSubmit = (values, { setSubmitting, setStatus, setErrors }) => {
     const isCreation = !values["@id"];
 
-    console.log(values)
+
+
+    if(!patient) return console.log("il n'y a pas de patient");
+
+    values.subject = patient["@id"];
+
     saveMutation.mutate(
-      { values },
+      {values},
       {
         onSuccess: () => {
           setStatus({
@@ -164,23 +140,6 @@ export const EncounterForm: FunctionComponent<Props> = ({ setOpen, encounter }) 
           return(
             <form  onSubmit={handleSubmit}>
               <div className="grid w-full items-center gap-4">
-
-              <Field id={`subject_patient_family_0`} name={`subject.name.0.family`} as={InputFormik} type={'string'}
-                     placeholder="Nom" label={"Nom du patient"}/>
-              <ErrorMessage className="text-xs text-red-500 pt-1" component="div" name={`subject.name.0.family`}/>
-
-              <Field id={`subject_patient_given_0`} name={`subject.name.0.given.0`} as={InputFormik} type={'string'}
-                     placeholder="Prénom" label={"Prénom du patient"}/>
-              <ErrorMessage className="text-xs text-red-500 pt-1" component="div" name={`name.0.given.0`}/>
-
-
-              <Field id="subject_patient_email" name="subject.email" as={InputFormik} type={'email'} placeholder="E-mail"
-                     label={"E-mail du patient"}/>
-              <ErrorMessage className="text-xs text-red-500 pt-1" component="div" name="subject.email"/>
-
-              <Field id="subject_patient_birthDate" name="subject.birthdate" as={DateFormikInput} type='dateTime'
-                     placeholder="JJ/MM/AAAA" label={'Date de naissance'}/>
-              <ErrorMessage className="text-xs text-red-500 pt-1" component="div" name="subject.birthdate"/>
 
                 <Field id="encounter_plannedStartDate" name="plannedStartDate" as={DateFormikInput} type='dateTime'
                        placeholder="JJ/MM/AAAA" label={"Date de l'intervention"}/>

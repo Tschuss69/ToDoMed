@@ -2,12 +2,12 @@
 
 namespace App\EventSubscriber;
 
-use App\Entity\Fhir\Administration\Patient;
 use App\Entity\Fhir\Administration\Practitioner;
+use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Events;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 
-class PractitionerRoleSubscriber
+class PractitionerRoleSubscriber implements EventSubscriber
 {
     public function getSubscribedEvents()
     {

@@ -7,6 +7,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use App\Controller\Fhir\Administration\GetCurrentPatientController;
 use App\Controller\GetEncounterByPatientController;
 use App\State\Processor\UserProcessor;
 use Doctrine\ORM\Mapping as ORM;
@@ -24,7 +25,10 @@ use App\Traits\BirthdateTrait;
     mercure: true
 )]
 #[ORM\Entity]
-#[Get]
+#[Get(
+    security: "is_granted('VIEW', object)",
+    securityMessage: "Vous n'avez pas les droits nécessaires pour accéder à ce patient."
+)]
 #[Post(processor: UserProcessor::class)]
 #[Delete]
 #[Put]

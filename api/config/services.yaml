@@ -30,3 +30,9 @@ services:
     App\EventSubscriber\PatientRoleSubscriber:
         tags:
             - { name: doctrine.event_subscriber }
+    App\EventSubscriber\PractitionerRoleSubscriber:
+        tags:
+            - { name: doctrine.event_subscriber }
+    App\EventListener\JWTCreatedListener:
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_created, method: onJWTCreated }

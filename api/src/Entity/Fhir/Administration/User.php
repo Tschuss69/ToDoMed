@@ -6,6 +6,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -24,6 +25,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\InheritanceType('JOINED')]
 #[ORM\DiscriminatorColumn(name: 'discr', type: 'string')]
 #[ORM\DiscriminatorMap(['patient' => Patient::class, 'practitioner' => Practitioner::class])]
+#[UniqueEntity(fields: ['email'], message: 'This email is already used.')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -32,7 +34,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['admin:read', 'practitioner:read'])]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'string', length: 50)]
+    #[ORM\Column(type: 'string', length: 50, unique: true)]
     #[Groups(['read', 'admin:write', 'practitioner:write', 'admin:read', 'practitioner:read'])]
     protected ?string $email = null;
 
@@ -98,6 +100,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->roles = $roles;
 
         return $this;
+    }
+
+    public function hasRole(string $role): bool
+    {
+        return in_array($role, $this->getRoles());
     }
 
     /**

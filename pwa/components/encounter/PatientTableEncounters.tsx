@@ -4,22 +4,9 @@ import moment from "moment/moment";
 import {Button} from "@/components/ui/Button";
 import React from "react";
 import Link from "next/link";
-import {useRouter} from "next/router";
-import { useQuery} from "react-query";
-import {FetchResponse} from "@/utils/dataAccess";
-import {PagedCollection} from "@/types/collection";
-import {useMercure} from "@/utils/mercure";
-import {getEncounters, getEncountersPath} from "@/components/encounter/PageList";
-import {redirect} from "next/navigation";
+
 
 export function PatientTableEncounters({listeEncounters}: {listeEncounters : Encounter[]}){
-
-
-  const router = useRouter();
-
-  
-
-  if(listeEncounters &&  listeEncounters.length < 1) router.push(`/encounters/${listeEncounters['id']}/patient`)
 
   return(
     <Table>

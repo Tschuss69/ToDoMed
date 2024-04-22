@@ -27,6 +27,14 @@ export const deletePatient = async (id: string) =>
 export const getPatient = async (id: string | string[] | undefined) =>
   id ? await fetch<Patient>(`/patients/${id}`) : Promise.resolve(undefined);
 
+export const getConnectedPatient = async () =>
+  await fetch<Patient>(`/patient`);
+
 export const getEncountersByPatient =
-  (id : number) => async () =>
-    await fetch<Encounter>(`/patients/${id}/encounters`);
+  (id : number) => async () =>{
+    const result = await fetch<Encounter[]>(`/patients/${id}/encounters`);
+    console.log('getEncountersByPatient')
+    console.log(result)
+    return  result;
+  }
+

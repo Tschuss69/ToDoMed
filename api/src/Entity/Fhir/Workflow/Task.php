@@ -67,9 +67,9 @@ class Task
     #[ORM\ManyToMany(targetEntity: Encounter::class, mappedBy: 'tasks')]
     private Collection $encounters;
 
-    #[ORM\Column(type: 'integer')]
+    /*#[ORM\Column(type: 'string')]
     #[Groups(['admin:read', 'admin:write', 'practitioner:read', 'practitioner:write', 'patient:read'])]
-    private ?int $completionRate = null;
+    private ?string $completionRate = null;*/
 
 
     public function __construct() {
@@ -193,13 +193,13 @@ class Task
         return $this;
     }
 
-    public function getCompletionRate(): ?string {
+   /* public function getCompletionRate(): ?string {
         return $this->completionRate;
     }
 
     public function setCompletionRate(?string $completionRate): self {
         $this->completionRate = $completionRate;
         return $this;
-    }
+    }*/
 }
 

@@ -40,7 +40,7 @@ class Encounter
     #[Groups(['admin:read', 'admin:write', 'practitioner:read', 'practitioner:write', 'patient:read'])]
     private ?string $status = null;
 
-    #[ORM\ManyToOne(targetEntity: Patient::class, cascade: ['persist'], inversedBy: "encounters")]
+    #[ORM\ManyToOne(targetEntity: Patient::class, inversedBy: "encounters")]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['admin:read', 'admin:write', 'practitioner:read', 'practitioner:write', 'patient:read'])]
     private ?Patient $subject = null;
@@ -59,7 +59,7 @@ class Encounter
     #[Groups(['admin:read', 'admin:write', 'practitioner:read', 'practitioner:write', 'patient:read'])]
     private ?PractitionerRole $actor = null;
 
-    #[ORM\ManyToMany(targetEntity: Task::class, inversedBy: 'encounters', cascade: ['persist', 'remove'])]
+    #[ORM\ManyToMany(targetEntity: Task::class, inversedBy: 'encounters', cascade: ['persist', 'remove', 'merge'])]
     #[ORM\JoinTable(name: 'encounter_task')]
     #[Groups(['admin:read', 'admin:write', 'practitioner:read', 'practitioner:write', 'patient:read'])]
     private Collection $tasks;

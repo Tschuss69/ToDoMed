@@ -26,6 +26,8 @@
     "init": "^0.1.2",
     "input": "^1.0.1",
     "isomorphic-unfetch": "^4.0.2",
+    "jose": "^5.2.4",
+    "jwt-decode" : "^4.0.0",
     "label": "^0.2.2",
     "lucide-react": "^0.338.0",
     "moment": "^2.30.1",

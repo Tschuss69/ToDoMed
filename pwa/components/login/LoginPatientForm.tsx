@@ -1,25 +1,20 @@
-'use client'
-
 import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "@/components/ui/Card";
 import {InputFormik} from "@/components/ui/form/InputFormik";
-import {BirthDateFormikInput} from "@/components/ui/form/DateFormikInput";
 import {Button} from "@/components/ui/Button";
 import React from "react";
 import {Field, Form, Formik} from "formik";
 
-export function LoginPatientForm({submitFunction}){
+export function LoginPatientForm({submitFunction, error}){
 
   return(
     <div className={'absolute top-100 w-screen h-screen pt-24'}>
       <Formik
         initialValues={{
-          email: '',
-          birthdate:'',
+          username: '',
+          password:'',
         }}
         onSubmit={async (values) => {
-          await new Promise((r) => setTimeout(r, 500));
-          submitFunction();
-          alert(JSON.stringify(values, null, 2));
+          await submitFunction(values);
         }}
       >
         <Form>
@@ -31,12 +26,14 @@ export function LoginPatientForm({submitFunction}){
               </CardHeader>
               <CardContent>
                 <div className="grid w-full items-center gap-4">
-                  <Field name="email" as={InputFormik} placeholder="E-mail" label={'Email'}/>
-                  <Field name="birthdate" as={BirthDateFormikInput} placeholder="JJ/MM/AAAA" label={'Date de naissance'}/>
+                  <Field name="username" as={InputFormik} placeholder="E-mail" label={'Email'}/>
+                  <Field name="password" as={InputFormik} placeholder="Mot de passe" label={'Mot de passe'}/>
+                  {error === 'oui' ?  <Button>Mauvais identifiants</Button>: null}
                 </div>
               </CardContent>
               <CardFooter className="flex justify-center">
                 <Button >Connexion</Button>
+
               </CardFooter>
             </Card>
           </div>

@@ -6,6 +6,7 @@ export class Patient implements Item {
   public "@id"?: string;
 
   constructor(
+    public password: string,
     _id?: string,
     public name?: HumanName[],
     public generalPractitioner?: string[],
@@ -14,7 +15,8 @@ export class Patient implements Item {
     public gender?: string,
     public birthDate?: Date,
     public telecom?: any,
-    public encounters?: Array<Encounter>
+    public encounters?: Array<Encounter>,
+
   ) {
     this["@id"] = _id;
   }

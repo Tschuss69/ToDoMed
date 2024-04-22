@@ -3,6 +3,7 @@ import isomorphicFetch from "isomorphic-unfetch";
 import { PagedCollection } from "../types/collection";
 import { Item } from "../types/item";
 import { ENTRYPOINT } from "../config/entrypoint";
+import {getToken} from "@/api/getToken";
 
 const MIME_TYPE = "application/ld+json";
 
@@ -37,7 +38,7 @@ const extractHubURL = (response: Response): null | URL => {
 export const fetch = async <TData>(
   id: string,
   init: RequestInit = {}
-): Promise<FetchResponse<TData> | undefined> => {
+): Promise<FetchResponse<TData> | undefined > => {
   if (typeof init.headers === "undefined") init.headers = {};
   if (!init.headers.hasOwnProperty("Accept"))
     init.headers = { ...init.headers, Accept: MIME_TYPE };
@@ -48,11 +49,27 @@ export const fetch = async <TData>(
   )
     init.headers = { ...init.headers, "Content-Type": MIME_TYPE };
 
+  /*
+  * Ajout du token s'il existe
+  * */
+
+  const token = getToken();
+
+  if(token){
+    console.log(token)
+    init.headers = { ...init.headers, 'Authorization': `Bearer ${token}`};
+  }else{
+    console.log("le patient n'est pas authentifie")
+  }
+
+
   const resp = await isomorphicFetch(ENTRYPOINT + id, init);
   if (resp.status === 204) return;
 
+
   const text = await resp.text();
   const json = JSON.parse(text);
+
   if (resp.ok) {
     return {
       hubURL: extractHubURL(resp)?.toString() || null, // URL cannot be serialized as JSON, must be sent as string
@@ -71,6 +88,7 @@ export const fetch = async <TData>(
   );
 
   throw { message: errorMessage, status, fields } as FetchError;
+
 };
 
 export const getItemPath = (

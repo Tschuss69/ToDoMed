@@ -8,25 +8,26 @@ import {
 import {Button} from "@/components/ui/button";
 import React, {useEffect, useState} from "react";
 import Layout from "@/components/practitioner/PractitionerLayout";
-import {EncounterForm} from "@/components/forms/EncounterForm";
 import {useRouter} from "next/router";
-import {dehydrate, QueryClient, useQuery} from "react-query";
+import {useQuery} from "react-query";
 import {FetchResponse} from "@/utils/dataAccess";
 import {PagedCollection} from "@/types/collection";
 import {Encounter} from "@/types/Encounter";
 import {useMercure} from "@/utils/mercure";
 import {getEncounters, getEncountersPath} from "@/api/encounter/fetch";
 import {TableEncounters} from "@/components/encounter/TableEncounters";
-
+import {CreateEncounter} from "@/components/encounter/CreateEncounter";
+import {Patient} from "@/types/Patient";
 
 
 export default function Page(){
   const [open, setOpen] = useState(false);
-  const [valueToChange, setValuesToChange] = useState<Encounter | null>()
+  const [encounterToChange, setEncounterToChange] = useState<Encounter | null>(null);
+  const [patientToChange, setPatientToChange] = useState<Patient|null>(null);
 
   useEffect(() => {
-    if(!open && valueToChange){
-      setValuesToChange(null)
+    if(!open && encounterToChange){
+      setEncounterToChange(null)
     }
   }, [open])
 
@@ -41,7 +42,8 @@ export default function Page(){
   const collection = useMercure(encounters, hubURL);
 
   const onChangeEncounter = (values: Encounter) => {
-    setValuesToChange(values);
+    setEncounterToChange(values);
+    setPatientToChange(values.subject? values.subject : null)
     setOpen(true);
   }
 
@@ -57,13 +59,13 @@ export default function Page(){
           <SheetHeader>
             <SheetTitle>Nouvelle intervention</SheetTitle>
             <SheetDescription>
-             <EncounterForm setOpen={setOpen} encounter={valueToChange ? valueToChange : null}/>
+              <CreateEncounter patient={patientToChange} setOpen={setOpen} encounter={encounterToChange} />
             </SheetDescription>
           </SheetHeader>
         </SheetContent>
       </Sheet>
 
-      <TableEncounters listeEncounters={collection["hydra:member"]} onChangeEncounter={onChangeEncounter}/>
+      <TableEncounters listeEncounters={collection["hydra:member"]} onChangeEncounter={onChangeEncounter} />
     </div>
     </Layout>
   )

@@ -98,3 +98,7 @@ RUN set -eux; \
 	composer dump-env prod; \
 	composer run-script --no-dev post-install-cmd; \
 	chmod +x bin/console; sync;
+
+FROM php:7.4-fpm
+RUN pecl install xdebug-3.0.0 && docker-php-ext-enable xdebug
+COPY xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini

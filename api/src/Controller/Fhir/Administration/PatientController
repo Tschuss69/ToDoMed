@@ -1,0 +1,40 @@
+<?php
+
+namespace App\Controller\Fhir\Administration;
+
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Security;
+use OpenApi\Annotations as OA;
+use App\Entity\Fhir\Administration\Patient;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\SerializerInterface;
+
+class PatientController extends AbstractController
+{
+    private SerializerInterface $serializer;
+
+    public function __construct(SerializerInterface $serializer)
+    {
+        $this->serializer = $serializer;
+    }
+
+
+    public function getPatient(UserInterface $user): Response
+    {
+        // Vérification pour s'assurer que l'utilisateur authentifié est un Patient
+        if (!$user instanceof Patient) {
+            // Si l'utilisateur n'est pas un patient, renvoyer une erreur d'accès refusé
+            throw new AccessDeniedException('Access denied. This user is not a patient.');
+        }
+
+        // Si l'utilisateur est un Patient, sérialiser et renvoyer ses données
+        // Utilisation des groupes de sérialisation pour contrôler les données exposées
+        $data = $this->serializer->serialize($user, 'json', ['groups' => ['patient:read']]);
+
+        return new Response($data, Response::HTTP_OK, ['Content-Type' => 'application/json']);
+    }
+}

@@ -3,17 +3,23 @@ import {Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, Table
 import Link from "next/link";
 import {Button} from "@/components/ui/Button";
 
+const statusToText = {
+  'requested' : 'A faire',
+  'in-progress': 'En cours',
+  'completed': 'Fait',
+  'cancelled': 'Annulé'
+}
+
+
 export function TableTasksPatient({tasks}: {tasks: Task[]}){
   return(
     <Table>
       <TableCaption>Liste des actions à réaliser</TableCaption>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[100px]">Type</TableHead>
-          <TableHead>Titre</TableHead>
           <TableHead>Description</TableHead>
           <TableHead>Statut</TableHead>
-          <TableHead>Action</TableHead>
+          <TableHead></TableHead>
 
         </TableRow>
       </TableHeader>
@@ -21,10 +27,8 @@ export function TableTasksPatient({tasks}: {tasks: Task[]}){
         {
           tasks.map((action:Task, key:number)=>
             <TableRow key={action["@id"]}>
-              <TableCell className="font-medium">Vidéo</TableCell>
-              <TableCell className="font-medium">Vidéo à regarder</TableCell>
               <TableCell>{action.description}</TableCell>
-              <TableCell>{action.status}</TableCell>
+              <TableCell>{action.status ? statusToText[action.status] : null}</TableCell>
               <TableCell className="text-right"><Link href={`/tasks/video/${key+1}`}><Button>Ouvrir</Button></Link></TableCell>
             </TableRow>
 
