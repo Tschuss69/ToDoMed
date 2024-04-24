@@ -7,7 +7,6 @@ export function Deconnexion(){
   function onDeconnexion(){
     localStorage.removeItem('token');
     localStorage.removeItem('user_id');
-    alert("c'est fait")
   }
 
   return(

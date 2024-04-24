@@ -14,6 +14,9 @@ import { fetch, FetchResponse, getItemPaths } from "@/utils/dataAccess";
 import { useMercure } from "@/utils/mercure";
 import Layout from "@/components/patient/PatientLayout";
 import {DashboardPatient} from "@/components/patient/DashboardPatient";
+import {PanelExplications} from "@/components/patient/PanelExplications";
+import {jwtDecode} from "jwt-decode";
+import {useState} from "react";
 
 const getPatient = async (id: string | string[] | undefined) =>
   id ? await fetch<Patient>(`/patients/${id}`) : Promise.resolve(undefined);
@@ -26,7 +29,13 @@ const Page: NextComponentType<NextPageContext> = () => {
     useQuery<FetchResponse<Patient> | undefined>(["patient", id], () =>
       getPatient(id)
     );
+
+
   const patientData = useMercure(patient, hubURL);
+  console.log('patientData')
+  console.log(patientData)
+
+
 
   if (!patientData) {
     return <DefaultErrorPage statusCode={404} />;
@@ -40,6 +49,7 @@ const Page: NextComponentType<NextPageContext> = () => {
         </Head>
       </div>
       <Layout>
+        <PanelExplications/>
         <DashboardPatient patientId={patientData['id']}/>
       </Layout>
 
@@ -47,29 +57,8 @@ const Page: NextComponentType<NextPageContext> = () => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async ({
-  params: { id } = {},
-}) => {
-  if (!id) throw new Error("id not in query param");
-  const queryClient = new QueryClient();
-  await queryClient.prefetchQuery(["patient", id], () => getPatient(id));
 
-  return {
-    props: {
-      dehydratedState: dehydrate(queryClient),
-    },
-    revalidate: 1,
-  };
-};
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  const response = await fetch<PagedCollection<Patient>>("/patients");
-  const paths = await getItemPaths(response, "patients", "/patients/[id]");
 
-  return {
-    paths,
-    fallback: true,
-  };
-};
 
 export default Page;

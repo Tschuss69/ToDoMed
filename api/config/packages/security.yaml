@@ -19,6 +19,10 @@ security:
                 check_path: /api/login
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
+        secured_area:
+            pattern: ^/patients(/|$)  # ou quelque chose de plus englobant si nécessaire
+            stateless: true
+            jwt: ~  # Seulement si vous utilisez JWT pour cette section aussi
         api:
             pattern: ^/api
             stateless: true
@@ -29,6 +33,7 @@ security:
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
         - { path: ^/api/patients, roles: ROLE_PATIENT }
         - { path: ^/api/practitioners, roles: ROLE_PRACTITIONER }
+        - { path: ^/patients(/|$), roles: IS_AUTHENTICATED_FULLY }
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
 

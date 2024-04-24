@@ -46,8 +46,10 @@ export const fetch = async <TData>(
     init.body !== undefined &&
     !(init.body instanceof FormData) &&
     !init.headers?.hasOwnProperty("Content-Type")
-  )
+  ){
     init.headers = { ...init.headers, "Content-Type": MIME_TYPE };
+  }
+
 
   /*
   * Ajout du token s'il existe
@@ -55,9 +57,10 @@ export const fetch = async <TData>(
 
   const token = getToken();
 
+  console.log(token)
+
   if(token){
-    console.log(token)
-    init.headers = { ...init.headers, 'Authorization': `Bearer ${token}`};
+    init.headers = { ...init.headers, 'Authorization': `Bearer ${token}`}
   }else{
     console.log("le patient n'est pas authentifie")
   }

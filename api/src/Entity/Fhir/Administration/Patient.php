@@ -19,6 +19,7 @@ use App\Traits\GenderTrait;
 use App\Traits\NameTrait;
 use App\Traits\BirthdateTrait;
 
+
 #[ApiResource(
     normalizationContext: ['groups' => ['admin:read','practitioner:read', 'patient:read']],
     denormalizationContext: ['groups' => ['admin:write', 'practitioner:write']],
@@ -62,8 +63,6 @@ class Patient extends User
     #[Groups(['practitioner:read', 'practitioner:write', 'patient:read'])]
     private Collection $generalPractitioner;
 
-    #[Groups(['practitioner:read', 'practitioner:write', 'patient:read'])]
-    protected ?string $email = null;
 
     #[ORM\Column(type: 'string', length: 50, nullable: true)]
     #[Groups(['practitioner:read', 'practitioner:write', 'patient:read'])]

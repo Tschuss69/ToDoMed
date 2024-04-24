@@ -11,77 +11,7 @@ import {Patient} from "@/types/Patient";
 import DefaultErrorPage from "next/error";
 import {getPatient} from "@/api/patient/fetch";
 import {Task} from "@/types/Task";
-
-const actions = [
-  {
-    id: "interet",
-    type: 'video',
-    content: {
-      title: 'A quoi sert un pace maker ?',
-      description: 'Cette vidéo vous explique à quoi sert un pace maker',
-      url: 'url'
-    },
-    status: 'ToDo',
-    deadlineDate: '23/04/2024'
-  },
-  {
-    id: "intervention",
-    type: 'video',
-    content: {
-      title: "Comment se déroule l'intervention ?",
-      description: "Explications des étapes d'une pause de pace maker",
-      url: 'url'
-    },
-    status: 'ToDo',
-    deadlineDate: '23/04/2024'
-  },
-  {
-    id: "risques",
-    type: 'video',
-    content: {
-      title: "Les risques de l'intervention",
-      description: "Nous vous expliquons les risques de l'intervention",
-      url: 'url'
-    },
-    status: 'ToDo',
-    deadlineDate: '23/04/2024'
-  },
-  {
-    id: "telesuivi",
-    type: 'video',
-    content: {
-      title: "Le Télésuivi c'est quoi ?",
-      description: "Nous vous expliquons à quoi peut servir le télé suivi",
-      url: 'url'
-    },
-    status: 'ToDo',
-    deadlineDate: '23/04/2024'
-  },
-]
-
-
-const actionsTable = [
-  {
-    title: 'A quoi sert un pace maker ?',
-    description: 'Cette vidéo vous explique à quoi sert un pace maker',
-    url: 'url'
-  },
-  {
-    title: "Comment se déroule l'intervention ?",
-    description: "Explications des étapes d'une pause de pace maker",
-    url: 'url'
-  },
-  {
-    title: "Les risques de l'intervention",
-    description: "Nous vous expliquons les risques de l'intervention",
-    url: 'url'
-  },
-  {
-    title: "Le Télésuivi c'est quoi ?",
-    description: "Nous vous expliquons à quoi peut servir le télé suivi",
-    url: 'url'
-  },
-]
+import {PanelExplications} from "@/components/patient/PanelExplications";
 
 function TablePatientAction({listeAction}: {listeAction: Task[]}){
   return(
@@ -137,28 +67,6 @@ function ListeVideoPatient({listeAction}){
   )
 }
 
-function PanelExplication(){
-  return(
-    <div className="mb-10 flex flex-col justify-center gap-6 rounded-lg bg-gray-50 px-6 py-10 md:px-20">
-      <p className={`text-xl text-gray-800 md:text-3xl md:leading-normal`}>
-        <strong>Bienvenue dans votre Espace Personnel</strong>
-      </p>
-      <p className={'text-lg'}>
-        Cet espace vous est dédié pour <strong>préparer votre intervention</strong>. Vous y trouverez des <strong>vidéos explicatives</strong> sur votre intervention et votre hospitalisation. Nous vous invitons à les visionner et vous pouvez revenir sur votre espace pour les revoir à tout moment.
-      </p>
-
-      <p className={'text-lg'}>
-        Merci également de <strong>remplir les formulaires</strong> nécessaires à votre dossier médical. Ceux-ci sont cruciaux pour une prise en charge adaptée et sécurisée.
-      </p>
-
-      <p className={'text-lg'}>
-        Votre préparation et votre compréhension sont clés pour nous. Ensemble, faisons de cette étape une réussite.
-      </p>
-
-    </div>
-  );
-}
-
 
 
 export default function Page(){
@@ -174,7 +82,6 @@ export default function Page(){
     return <DefaultErrorPage statusCode={404}/>;
   }
 
-
   const firstEncounter = patientData.encounters? patientData.encounters[0] : null;
 
   const tasks = firstEncounter ? firstEncounter.tasks : null;
@@ -183,7 +90,7 @@ export default function Page(){
     <Layout>
       <div>
 
-        <PanelExplication/>
+        <PanelExplications/>
         <div className="flex flex-col justify-center gap-6 rounded-lg bg-gray-50 px-6 py-10 md:px-20">
           <h1 className={'text-xl text-center font-medium text-gray-800 md:text-3xl md:leading-normal'}><strong>Ce que vous devez faire avant l'hospitalisation</strong></h1>
         </div>

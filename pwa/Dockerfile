@@ -76,3 +76,5 @@ ENV PORT 3000
 ENV HOSTNAME "0.0.0.0"
 
 CMD ["node", "server.js"]
+
+RUN chmod -R 755 /srv/app/public

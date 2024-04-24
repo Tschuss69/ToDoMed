@@ -4,6 +4,7 @@ import React from "react";
 import moment from "moment";
 import LayoutTask from "@/pages/tasks/video/Layout";
 
+
 const action = {
   id: 1,
   type: 'CodeableConcept[Video à voir]',
@@ -18,6 +19,7 @@ const action = {
 };
 
 export default function Page(){
+
   return(
     <LayoutTask>
       <Card>

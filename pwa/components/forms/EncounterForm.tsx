@@ -27,10 +27,10 @@ const encounter_initial = {
   status: 'unknown',
   type: "/codeable_concepts/1",
   tasks:[
-    initialTask("initial", "Vidéo d'introduction"),
-    initialTask("intervention", "La pose d'un pace maker c'est quoi ?"),
+    initialTask('telesuivi', "Dois-je demander un télé-suivi ? "),
     initialTask("complication", "Quels sont les risques de l'intervention ?"),
-    initialTask('telesuivi', "Dois-je demander un télé-suivi ? ")
+    initialTask("intervention", "La pose d'un pace maker c'est quoi ?"),
+    initialTask("initial", "Vidéo d'introduction")
   ]
 };
 

@@ -11,6 +11,7 @@ import { fetch, FetchResponse } from "@/utils/dataAccess";
 import { useMercure } from "@/utils/mercure";
 import Layout from "@/components/patient/PatientLayout";
 import {TableTasksPatient} from "@/components/task/TableTasksPatient";
+import {PanelExplications} from "@/components/patient/PanelExplications";
 
 const getEncounter = async (id: string | string[] | undefined) =>
   id ? await fetch<Encounter>(`/encounters/${id}`) : Promise.resolve(undefined);
@@ -38,6 +39,7 @@ const Page: NextComponentType<NextPageContext> = () => {
         </Head>
       </div>
       <Layout>
+        <PanelExplications/>
         <TableTasksPatient tasks={encounterData.tasks}/>
       </Layout>
     </div>

@@ -12,6 +12,15 @@ const statusToText = {
 
 
 export function TableTasksPatient({tasks}: {tasks: Task[]}){
+
+  const correspondanceContentUrl = {
+    telesuivi : "telesuivi",
+    complication : "risques",
+    intervention: "intervention",
+    initial: "interet"
+  }
+
+  console.log(tasks)
   return(
     <Table>
       <TableCaption>Liste des actions à réaliser</TableCaption>
@@ -29,7 +38,7 @@ export function TableTasksPatient({tasks}: {tasks: Task[]}){
             <TableRow key={action["@id"]}>
               <TableCell>{action.description}</TableCell>
               <TableCell>{action.status ? statusToText[action.status] : null}</TableCell>
-              <TableCell className="text-right"><Link href={`/tasks/video/${key+1}`}><Button>Ouvrir</Button></Link></TableCell>
+              <TableCell className="text-right"><Link href={`/tasks/video/` + correspondanceContentUrl[action.content]}><Button>Ouvrir</Button></Link></TableCell>
             </TableRow>
 
           )
