@@ -6,6 +6,7 @@ export class Task implements Item {
 
   constructor(
     _id?: string,
+    public title?: string,
     public status?: 'requested' | 'in-progress' | 'completed' | 'cancelled',
     public priority?: 'routine' |'urgent',
     public description?: string,

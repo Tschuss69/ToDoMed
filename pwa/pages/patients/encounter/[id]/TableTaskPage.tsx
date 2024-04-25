@@ -34,6 +34,7 @@ export function Page(){
   const collection = useMercure(tasks, hubURL);
 
   if (!collection || !collection["hydra:member"]) return null;
+  console.log(collection)
 
   return(
     <Table>
@@ -50,13 +51,13 @@ export function Page(){
       </TableHeader>
       <TableBody>
         {
-          collection["hydra:member"].map((action:Task, key:number)=>
+          collection["hydra:member"].map((action, key:number)=>
             <TableRow key={action["@id"]}>
               <TableCell className="font-medium">Vidéo</TableCell>
               <TableCell className="font-medium">Vidéo à regarder</TableCell>
               <TableCell>{action.description}</TableCell>
               <TableCell>{action.status}</TableCell>
-              <TableCell className="text-right"><Link href={`/tasks/video/${key+1}`}><Button>Ouvrir</Button></Link></TableCell>
+              <TableCell className="text-right"><Link href={`/encounters/${action.id}/patient`}><Button>Ouvrir</Button></Link></TableCell>
             </TableRow>
 
           )

@@ -8,6 +8,8 @@ import Link from "next/link";
 
 export function PatientTableEncounters({listeEncounters}: {listeEncounters : Encounter[]}){
 
+    console.log(listeEncounters[0])
+
   return(
     <Table>
       <TableCaption>{"Patients en attente d'intervention"}</TableCaption>
@@ -24,7 +26,7 @@ export function PatientTableEncounters({listeEncounters}: {listeEncounters : Enc
             <TableRow key={encounter['@id']}>
               <TableCell className="font-medium">{encounter?.type?.text}</TableCell>
               <TableCell>{moment(encounter.plannedStartDate).format('DD/MM/YYYY')}</TableCell>
-              <TableCell><Link href={`${encounter['@id']}/patient`}><Button>Ouvrir</Button></Link></TableCell>
+              <TableCell><Link href={`/encounters/${encounter['id']}/patient`}><Button>Ouvrir</Button></Link></TableCell>
             </TableRow>
           ) : null
         }

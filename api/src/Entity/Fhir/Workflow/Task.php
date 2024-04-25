@@ -39,7 +39,13 @@ class Task
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups(['admin:read', 'admin:write', 'practitioner:read', 'practitioner:write', 'patient:read'])]
+    #[ORM\JoinColumn(nullable: false)]
     private ?string $description = null;
+
+    #[ORM\Column(type: 'string', length: 255)]
+    #[Groups(['admin:read', 'admin:write', 'practitioner:read', 'practitioner:write', 'patient:read'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?string $title = null;
 
     #[ORM\Column(type: 'datetime')]
     #[Groups(['admin:read', 'admin:write', 'practitioner:read', 'practitioner:write', 'patient:read'])]
@@ -67,9 +73,7 @@ class Task
     #[ORM\ManyToMany(targetEntity: Encounter::class, mappedBy: 'tasks')]
     private Collection $encounters;
 
-    /*#[ORM\Column(type: 'string')]
-    #[Groups(['admin:read', 'admin:write', 'practitioner:read', 'practitioner:write', 'patient:read'])]
-    private ?string $completionRate = null;*/
+
 
 
     public function __construct() {
@@ -129,6 +133,15 @@ class Task
 
     public function setPriority(?string $priority): self {
         $this->priority = $priority;
+        return $this;
+    }
+
+    public function getTitle(): ?string {
+        return $this->title;
+    }
+
+    public function setTitle(?string $title): self {
+        $this->title = $title;
         return $this;
     }
 
@@ -193,13 +206,6 @@ class Task
         return $this;
     }
 
-   /* public function getCompletionRate(): ?string {
-        return $this->completionRate;
-    }
 
-    public function setCompletionRate(?string $completionRate): self {
-        $this->completionRate = $completionRate;
-        return $this;
-    }*/
 }
 

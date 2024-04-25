@@ -11,7 +11,7 @@ const statusToText = {
 }
 
 
-export function TableTasksPatient({tasks}: {tasks: Task[]}){
+export function TableTasksPractitioner({tasks}: {tasks: Task[]}){
 
   const correspondanceContentUrl = {
     telesuivi : "telesuivi",
@@ -38,9 +38,7 @@ export function TableTasksPatient({tasks}: {tasks: Task[]}){
             <TableRow key={action["@id"]}>
               <TableCell>{action.description}</TableCell>
               <TableCell>{action.status ? statusToText[action.status] : null}</TableCell>
-              <TableCell className="text-right"><Link href={`${action['@id']}`}><Button>Ouvrir</Button></Link></TableCell>
             </TableRow>
-
           )
         }
 

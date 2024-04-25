@@ -1,70 +1,87 @@
 import {
-  GetStaticPaths,
-  GetStaticProps,
   NextComponentType,
   NextPageContext,
 } from "next";
 import DefaultErrorPage from "next/error";
-import Head from "next/head";
 import { useRouter } from "next/router";
-import { dehydrate, QueryClient, useQuery } from "react-query";
+import {useMutation, useQuery} from "react-query";
 
-import { Show } from "../../../components/task/Show";
-import { PagedCollection } from "../../../types/collection";
-import { Task } from "../../../types/Task";
-import { fetch, FetchResponse, getItemPaths } from "../../../utils/dataAccess";
-import { useMercure } from "../../../utils/mercure";
+import { Task } from "@/types/Task";
+import {FetchError, FetchResponse} from "@/utils/dataAccess";
+import { useMercure } from "@/utils/mercure";
+import VideoTask from "@/components/task/VideoTask";
+import {useEffect, useState} from "react";
+import {getTask, saveTask} from "@/api/task/fetch";
 
-const getTask = async (id: string | string[] | undefined) =>
-  id ? await fetch<Task>(`/tasks/${id}`) : Promise.resolve(undefined);
 
 const Page: NextComponentType<NextPageContext> = () => {
+
   const router = useRouter();
   const { id } = router.query;
+
+  const saveMutation = useMutation<
+      FetchResponse<Task> | undefined,
+      Error | FetchError,
+      SaveParams
+      >((saveParams) => saveTask(saveParams));
 
   const { data: { data: task, hubURL, text } = { hubURL: null, text: "" } } =
     useQuery<FetchResponse<Task> | undefined>(["task", id], () => getTask(id));
   const taskData = useMercure(task, hubURL);
 
+  const [taskCompleted, setTaskCompleted] = useState<boolean>();
+
+  useEffect(() => {
+    if(taskData && taskData.status === 'completed'){
+      setTaskCompleted(true)
+    }else{
+      setTaskCompleted(false)
+    }
+  }, [taskData])
+
+
+  const updateTask = (inTaskCompleted) => {
+    const status = inTaskCompleted ? "completed" : "requested";
+
+    const newValues = {...task, status: status};
+
+    saveMutation.mutate(
+        newValues,
+        {
+          onError: (error) => {
+            if(newValues.status === "completed" && taskCompleted){
+              setTaskCompleted(false);
+            }else if (newValues.status !== "completed" && !taskCompleted){
+              setTaskCompleted(true);
+            }
+          },
+        }
+    )
+  }
+
+  useEffect(() => {
+    if(taskCompleted &&  task?.status !== "completed"){
+      updateTask(taskCompleted);
+    }
+
+    if(!taskCompleted && task?.status === "completed"){
+      updateTask(taskCompleted);
+    }
+  }, [taskCompleted])
+
   if (!taskData) {
     return <DefaultErrorPage statusCode={404} />;
   }
 
+  const changeTask = () => {
+    setTaskCompleted(!taskCompleted)
+  }
+
   return (
-    <div>
-      <div>
-        <Head>
-          <title>{`Show Task ${taskData["@id"]}`}</title>
-        </Head>
-      </div>
-      <Show task={taskData} text={text} />
-    </div>
+    <VideoTask task={task} taskCompleted={taskCompleted} onTaskCheck={changeTask}/>
   );
 };
 
-export const getStaticProps: GetStaticProps = async ({
-  params: { id } = {},
-}) => {
-  if (!id) throw new Error("id not in query param");
-  const queryClient = new QueryClient();
-  await queryClient.prefetchQuery(["task", id], () => getTask(id));
 
-  return {
-    props: {
-      dehydratedState: dehydrate(queryClient),
-    },
-    revalidate: 1,
-  };
-};
-
-export const getStaticPaths: GetStaticPaths = async () => {
-  const response = await fetch<PagedCollection<Task>>("/tasks");
-  const paths = await getItemPaths(response, "tasks", "/tasks/[id]");
-
-  return {
-    paths,
-    fallback: true,
-  };
-};
 
 export default Page;

@@ -11,9 +11,10 @@ import {Task} from "@/types/Task";
 
 
 
-const initialTask = (content: 'initial' | 'intervention' | 'complication' | 'telesuivi', description: string): Task => {
+const initialTask = (title: string, content: 'initial' | 'intervention' | 'complication' | 'telesuivi', description: string): Task => {
   return(
     {
+      title: title,
       status: 'requested',
       priority: 'routine',
       description: description,
@@ -27,10 +28,10 @@ const encounter_initial = {
   status: 'unknown',
   type: "/codeable_concepts/1",
   tasks:[
-    initialTask('telesuivi', "Dois-je demander un télé-suivi ? "),
-    initialTask("complication", "Quels sont les risques de l'intervention ?"),
-    initialTask("intervention", "La pose d'un pace maker c'est quoi ?"),
-    initialTask("initial", "Vidéo d'introduction")
+    initialTask('Dois-je demander un télé-suivi ?', 'telesuivi', "Nous vous expliquons dans cette vidéo à quoi correspond le télésuivi et en quoi cette option peut être bénéfique pour vous."),
+    initialTask("Quels sont les risques de l'intervention ?", "complication", "Quels sont les complications potentielles de la pose d'un pace maker ? "),
+    initialTask("La pose d'un pace maker c'est quoi ?", "intervention", "Nous vous expliquons comment va se dérouler la pose d'un pace maker"),
+    initialTask("Introduction", "initial", "Pourquoi cette plateforme ?")
   ]
 };
 
@@ -80,6 +81,8 @@ export const EncounterForm: FunctionComponent<Props> = ({ setOpen, encounter, pa
 
   const onHandleSubmit = (values, { setSubmitting, setStatus, setErrors }) => {
     const isCreation = !values["@id"];
+
+    console.log(values)
 
 
 

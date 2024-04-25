@@ -1,7 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
 
-
-
 export function LocalVideo(props) {
 
     const videoRef = useRef(null);
@@ -30,9 +28,6 @@ export function LocalVideo(props) {
             console.log(percentage)
         }
     }
-
-
-
 
     return (
         <div>

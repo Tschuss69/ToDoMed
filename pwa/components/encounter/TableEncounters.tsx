@@ -3,6 +3,7 @@ import {Encounter} from "@/types/Encounter";
 import moment from "moment/moment";
 import {Button} from "@/components/ui/Button";
 import React from "react";
+import Link from "next/link";
 
 export function TableEncounters({listeEncounters, onChangeEncounter}){
 
@@ -24,7 +25,11 @@ export function TableEncounters({listeEncounters, onChangeEncounter}){
               <TableCell className="font-medium">{encounter?.subject?.name?.[0].text}</TableCell>
               <TableCell className="font-medium">{encounter?.type?.text}</TableCell>
               <TableCell>{moment(encounter.plannedStartDate).format('DD/MM/YYYY')}</TableCell>
-              <TableCell><Button onClick={() => onChangeEncounter(encounter)}>Modifier</Button></TableCell>
+              <TableCell>
+                <Button onClick={() => onChangeEncounter(encounter)}>Modifier</Button>
+                <Link href={`${encounter['@id']}/practitioner`}><Button>Acceder</Button></Link>
+              </TableCell>
+
             </TableRow>
           )
         }
