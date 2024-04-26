@@ -27,7 +27,7 @@ export function LoginPatientForm({submitFunction, error}){
               <CardContent>
                 <div className="grid w-full items-center gap-4">
                   <Field name="username" as={InputFormik} placeholder="E-mail" label={'Email'}/>
-                  <Field name="password" as={InputFormik} placeholder="Mot de passe" label={'Mot de passe'}/>
+                  <Field name="password" type={'password'} as={InputFormik} placeholder="Mot de passe" label={'Mot de passe'}/>
                   {error === 'oui' ?  <Button>Mauvais identifiants</Button>: null}
                 </div>
               </CardContent>

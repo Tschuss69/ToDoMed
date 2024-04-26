@@ -7,6 +7,7 @@ import {useMutation} from "react-query";
 import {FetchError, FetchResponse} from "@/utils/dataAccess";
 import {Patient} from "@/types/Patient";
 import {savePatient} from "@/api/patient/fetch";
+import {CalendarFormik} from "@/components/ui/form/CalendarFormik";
 
 interface SaveParams {
   values: Patient;
@@ -116,7 +117,6 @@ export function PatientForm({setEtape, patient, setPatient}){
                 <Field id="patient_birthDate" name="birthdate" as={DateFormikInput} type='dateTime'
                        placeholder="JJ/MM/AAAA" label={'Date de naissance'}/>
                 <ErrorMessage className="text-xs text-red-500 pt-1" component="div" name="birthdate"/>
-
 
                 {status && status.msg && (
                   <div

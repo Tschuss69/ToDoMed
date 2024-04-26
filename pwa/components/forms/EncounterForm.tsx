@@ -3,11 +3,11 @@ import {useMutation} from "react-query";
 import {FetchError, FetchResponse} from "@/utils/dataAccess";
 import {Patient} from "@/types/Patient";
 import {ErrorMessage, Field, Formik} from "formik";
-import {DateFormikInput} from "@/components/ui/form/DateFormikInput";
 import {Button} from "@/components/ui/Button";
 import {deleteEncounter, saveEncounter} from "@/api/encounter/fetch";
 import {Encounter} from "@/types/Encounter";
 import {Task} from "@/types/Task";
+import {CalendarFormik} from "@/components/ui/form/CalendarFormik";
 
 
 
@@ -140,9 +140,8 @@ export const EncounterForm: FunctionComponent<Props> = ({ setOpen, encounter, pa
           return(
             <form  onSubmit={handleSubmit}>
               <div className="grid w-full items-center gap-4">
-
-                <Field id="encounter_plannedStartDate" name="plannedStartDate" as={DateFormikInput} type='dateTime'
-                       placeholder="JJ/MM/AAAA" label={"Date de l'intervention"}/>
+                <Field id="encounter_plannedStartDate" name="plannedStartDate" as={CalendarFormik} type='dateTime'
+                       placeholder="JJ/MM/AAAA" label={"Date de l'intervention"} disabled={(date: Date) => date < new Date()}/>
                 <ErrorMessage className="text-xs text-red-500 pt-1" component="div" name="plannedStartDate"/>
 
               {status && status.msg && (
