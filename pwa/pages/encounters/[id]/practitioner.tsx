@@ -10,8 +10,6 @@ import { Encounter } from "@/types/Encounter";
 import { fetch, FetchResponse } from "@/utils/dataAccess";
 import { useMercure } from "@/utils/mercure";
 import Layout from "@/components/patient/PatientLayout";
-import {TableTasksPatient} from "@/components/task/TableTasksPatient";
-import {PanelExplications} from "@/components/patient/PanelExplications";
 import {TableTasksPractitioner} from "@/components/task/TableTasksPractitioner";
 import {Button} from "@/components/ui/Button";
 

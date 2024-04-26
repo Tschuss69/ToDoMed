@@ -82,9 +82,6 @@ export const EncounterForm: FunctionComponent<Props> = ({ setOpen, encounter, pa
   const onHandleSubmit = (values, { setSubmitting, setStatus, setErrors }) => {
     const isCreation = !values["@id"];
 
-    console.log(values)
-
-
 
     if(!patient) return console.log("il n'y a pas de patient");
 

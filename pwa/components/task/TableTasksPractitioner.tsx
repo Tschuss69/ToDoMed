@@ -1,26 +1,19 @@
 import {Task} from "@/types/Task";
 import {Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
-import Link from "next/link";
-import {Button} from "@/components/ui/Button";
+import {Badge} from "@/components/ui/badge";
 
-const statusToText = {
-  'requested' : 'A faire',
-  'in-progress': 'En cours',
-  'completed': 'Fait',
-  'cancelled': 'Annulé'
-}
 
 
 export function TableTasksPractitioner({tasks}: {tasks: Task[]}){
 
-  const correspondanceContentUrl = {
-    telesuivi : "telesuivi",
-    complication : "risques",
-    intervention: "intervention",
-    initial: "interet"
+  function displayStatus(status : string){
+      if(status === 'completed'){
+          return <Badge variant="outline">Fait</Badge>
+      }else if(status === 'requested'){
+          return <Badge variant="destructive">A faire</Badge>
+      }
   }
 
-  console.log(tasks)
   return(
     <Table>
       <TableCaption>Liste des actions à réaliser</TableCaption>
@@ -37,7 +30,7 @@ export function TableTasksPractitioner({tasks}: {tasks: Task[]}){
           tasks.map((action:Task, key:number)=>
             <TableRow key={action["@id"]}>
               <TableCell>{action.description}</TableCell>
-              <TableCell>{action.status ? statusToText[action.status] : null}</TableCell>
+              <TableCell>{action.status ? displayStatus(action.status) : null}</TableCell>
             </TableRow>
           )
         }
